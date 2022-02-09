@@ -1,0 +1,98 @@
+{
+  "groups": [
+    {
+      "name": "dynamic.module",
+      "description": "动态模块功能.",
+      "sourceType": "io.github.woodenlock.gaia.DynamicModuleProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "dynamic.module",
+      "type": "io.github.woodenlock.gaia.DynamicModuleProperties",
+      "description": "动态模块功能."
+    },
+    {
+      "name": "dynamic.module.includes",
+      "type": "java.lang.String",
+      "description": "动态路由包含的请求模块对应的数据库映射类集合，支持'*'通配."
+    },
+    {
+      "name": "dynamic.module.excludes",
+      "type": "java.lang.String",
+      "description": "动态路由排除的请求模块对应的数据库映射类集合，支持'*'通配."
+    },
+    {
+      "name": "dynamic.module.defaultPrefixPath",
+      "type": "java.lang.String",
+      "description": "默认的基础包路径(以“/”分割)，默认为动态模块启用注解{@link EnableDynamicModules}入口类所在的包路径."
+    },
+    {
+      "name": "dynamic.module.defaultPersistence",
+      "type": "java.lang.String",
+      "description": "默认生效的持久化类型."
+    },
+    {
+      "name": "dynamic.module.defaultComponents",
+      "type": "java.util.Set<java.lang.String>",
+      "description": "默认生效的组件类型集合."
+    },
+    {
+      "name": "dynamic.module.preferences",
+      "type": "java.util.List<io.github.woodenlock.gaia.Preference>",
+      "description": "偏好配置集合."
+    },
+    {
+      "name": "dynamic.module.preferences.persistence",
+      "type": "java.lang.String",
+      "description": "持久化约束."
+    },
+    {
+      "name": "dynamic.module.preferences.component",
+      "type": "java.lang.String",
+      "description": "组件约束."
+    },
+    {
+      "name": "dynamic.module.preferences.order",
+      "type": "java.lang.Integer",
+      "description": "排序值，数字越大优先级越高."
+    },
+    {
+      "name": "dynamic.module.preferences.suffix",
+      "type": "java.lang.String",
+      "description": "生成类后缀."
+    },
+    {
+      "name": "dynamic.module.preferences.path",
+      "type": "java.lang.String",
+      "description": "声明所在包路径(以“/”分割)."
+    },
+    {
+      "name": "dynamic.module.preferences.generate",
+      "type": "io.github.woodenlock.gaia.BooleanEnum",
+      "description": "是否要生成类信息.",
+      "defaultValue": "io.github.woodenlock.gaia.BooleanEnum.IGNORE"
+    },
+    {
+      "name": "dynamic.module.preferences.generatorPath",
+      "type": "java.lang.String",
+      "description": "生成器类的全路径."
+    },
+    {
+      "name": "dynamic.module.preferences.register",
+      "type": "io.github.woodenlock.gaia.BooleanEnum",
+      "description": "是否要作为bean注入spring容器.",
+      "defaultValue": "io.github.woodenlock.gaia.BooleanEnum.IGNORE"
+    },
+    {
+      "name": "dynamic.module.preferences.registrarPath",
+      "type": "java.lang.String",
+      "description": "spring bean注册器类的全路径."
+    },
+    {
+      "name": "dynamic.module.preferences.customizes",
+      "type": "java.util.Map<java.lang.String, java.lang.Object>",
+      "description": "自定义属性配置，用于支持埋点."
+    }
+  ]
+}
