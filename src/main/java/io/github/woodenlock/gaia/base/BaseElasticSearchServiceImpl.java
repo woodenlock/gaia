@@ -105,6 +105,14 @@ public abstract class BaseElasticSearchServiceImpl<R extends ElasticsearchReposi
         return ((ElasticsearchEntityInformation<?, ?>)info).getIdAttribute();
     }
 
+    /**
+     * 获取ES操作模板
+     * @return org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate
+     */
+    protected ElasticsearchRestTemplate getTemplate() {
+        return template;
+    }
+
     @Override
     public void afterPropertiesSet() {
         super.afterPropertiesSet();

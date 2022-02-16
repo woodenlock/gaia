@@ -1,8 +1,12 @@
 package io.github.woodenlock.gaia.web;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 基础分页查询请求对象
@@ -91,9 +95,29 @@ public class PageQuery<S> implements Serializable {
         }
     }
 
+    /**
+     * 执行分页参数转换
+     * 通过构造独立的静态方法来保留泛型约束
+     *
+     * @return PageRequest
+     */
+    public PageRequest toPageable() {
+        if (null == getCurrent() || null == getSize()) {
+            return null;
+        }
+        List<RestOrder> ovs = getOrders();
+        Sort sort = Sort.unsorted();
+        if (null != ovs && !ovs.isEmpty()) {
+            sort = Sort.by(ovs.stream().map(
+                ov -> new Sort.Order(null != ov.getAsc() && ov.getAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
+                    ov.getColumn())).collect(Collectors.toList()));
+        }
+
+        return PageRequest.of(getCurrent().intValue() - 1, getSize().intValue(), sort);
+    }
+
     @Override
     public String toString() {
-        return "{" + "\"size\":" + size + ",\"current\":" + current + ",\"orders\":" + orders + ",\"search\":" + search
-            + "}";
+        return "{" + "\"size\":" + size + ",\"current\":" + current + ",\"orders\":" + orders + ",\"search\":" + search + "}";
     }
 }

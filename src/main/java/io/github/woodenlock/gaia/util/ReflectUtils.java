@@ -54,6 +54,26 @@ public enum ReflectUtils {
     }
 
     /**
+     * 获取泛型类的对象的泛型数组
+     *
+     * @param source 运行时的泛型类的对象
+     * @param supper 所属的带泛型类型的类
+     * @return java.lang.Class<?>[]
+     */
+    public static <T> Class<?>[] getRawTypes(T source, Class<T> supper) {
+        Class<?>[] result = null;
+        if (null != source && null != supper) {
+            ResolvableType[] generics = ResolvableType.forClass(source.getClass()).as(supper).getGenerics();
+            result = new Class<?>[generics.length];
+            for (int i = 0; i < generics.length; i++) {
+                result[i] = generics[i].resolve();
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * 类属性缓存
      **/
     private static final Map<Class<?>, Map<String, PropertyDescriptor>> PROPERTY_CACHE = new ConcurrentHashMap<>();
@@ -112,26 +132,6 @@ public enum ReflectUtils {
     }
 
     /**
-     * 获取泛型类的对象的泛型数组
-     *
-     * @param source 运行时的泛型类的对象
-     * @param supper 所属的带泛型类型的类
-     * @return java.lang.Class<?>[]
-     */
-    public static <T> Class<?>[] getRawTypes(T source, Class<T> supper) {
-        Class<?>[] result = null;
-        if (null != source && null != supper) {
-            ResolvableType[] generics = ResolvableType.forClass(source.getClass()).as(supper).getGenerics();
-            result = new Class<?>[generics.length];
-            for (int i = 0; i < generics.length; i++) {
-                result[i] = generics[i].resolve();
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * 对象类型强转
      *
      * @param source           原始对象
@@ -151,9 +151,8 @@ public enum ReflectUtils {
                             t.getWriteMethod().invoke(target, value);
                         }
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new FatalBeanException(String
-                            .format("Could not copy property from source[%s] to target[%s] when conversion.", source,
-                                target), e);
+                        String temp = "Could not copy property from source[%s] to target[%s] when conversion.";
+                        throw new FatalBeanException(String.format(temp, source, target), e);
                     }
                 }, null, ignoreProperties);
                 result = target;
@@ -190,9 +189,8 @@ public enum ReflectUtils {
                                 t.getWriteMethod().invoke(single, value);
                             }
                         } catch (IllegalAccessException | InvocationTargetException e) {
-                            throw new FatalBeanException(String
-                                .format("Could not copy property from source[%s] to target[%s] when conversion list.",
-                                    source, single), e);
+                            String temp = "Could not copy property from source[%s] to target[%s] when conversion list.";
+                            throw new FatalBeanException(String.format(temp, source, single), e);
                         }
                     }, null, ignoreProperties);
                     result.add(single);

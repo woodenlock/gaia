@@ -113,6 +113,22 @@ public abstract class BaseSolrServiceImpl<R extends SolrCrudRepository<E, K>, E,
     }
 
     /**
+     * 获取solr操作模板
+     * @return org.springframework.data.solr.core.SolrTemplate
+     */
+    protected SolrTemplate getSolrTemplate() {
+        return solrTemplate;
+    }
+
+    /**
+     * 获取对应的持久化集合名称
+     * @return java.lang.String
+     */
+    protected String getCollectionName() {
+        return ((SolrEntityInformation<?, ?>)info).getCollectionName();
+    }
+
+    /**
      * 暴露 SolrTemplate的基础默认查询方法
      *
      * @param query         查询对象

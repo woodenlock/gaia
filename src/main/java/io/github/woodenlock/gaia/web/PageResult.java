@@ -1,5 +1,7 @@
 package io.github.woodenlock.gaia.web;
 
+import org.springframework.data.domain.Page;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +52,18 @@ public class PageResult<R> implements Serializable {
      * 查询到的业务结果集
      */
     private List<R> list;
+
+    /**
+     * 执行分页结果转换
+     * 通过构造独立的静态方法来保留泛型约束
+     *
+     * @param page spring data返回的分页实例
+     * @param func 对象转换函数
+     * @return PageResult<V>
+     */
+    public static <E, V> PageResult<V> of(Page<E> page, Function<E, V> func) {
+        return null == page ? null : of(page.getSize(), page.getTotalElements(), page.getNumber(), page.toList(), func);
+    }
 
     /**
      * 执行分页结果转换

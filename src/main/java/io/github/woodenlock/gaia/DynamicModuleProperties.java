@@ -13,7 +13,6 @@ import java.util.Set;
  * @author woodenlock
  * @date 2021-05-21 22:30:54
  */
-@SuppressWarnings("unused")
 class DynamicModuleProperties implements Serializable {
 
     /**
@@ -111,7 +110,7 @@ class DynamicModuleProperties implements Serializable {
     public String toString() {
         return "{" + "\"includes\":" + Arrays.toString(includes) + ",\"excludes\":" + Arrays.toString(excludes)
             + ",\"defaultPrefixPath\":\"" + defaultPrefixPath + "\",\"defaultPersistence\":\"" + defaultPersistence
-            + "\",\"defaultComponents\":" + defaultComponents + ",\"preferences\":" + Arrays.toString(
-            defaultPreferences) + ",\"preferences\":" + preferences + "}";
+            + "\",\"defaultComponents\":" + defaultComponents + ",\"preferences\":" + Arrays
+            .toString(defaultPreferences) + ",\"preferences\":" + preferences + "}";
     }
 }

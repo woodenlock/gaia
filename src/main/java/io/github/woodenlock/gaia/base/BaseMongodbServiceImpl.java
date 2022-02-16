@@ -90,4 +90,20 @@ public abstract class BaseMongodbServiceImpl<R extends MongoRepository<E, K>, E,
     protected String getKeyName() {
         return ((MongoEntityInformation<?, ?>)info).getIdAttribute();
     }
+
+    /**
+     * 获取mongodb操作模板
+     * @return org.springframework.data.mongodb.core.MongoTemplate
+     */
+    protected MongoTemplate getMongoTemplate() {
+        return mongoTemplate;
+    }
+
+    /**
+     * 获取对应的持久化集合名称
+     * @return java.lang.String
+     */
+    protected String getCollectionName() {
+        return ((MongoEntityInformation<?, ?>)info).getCollectionName();
+    }
 }

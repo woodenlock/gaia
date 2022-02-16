@@ -65,9 +65,17 @@ public class DynamicModuleRegistrar implements ImportBeanDefinitionRegistrar, En
     private MetadataReaderFactory metaReader;
 
     @Override
-    public void registerBeanDefinitions(@NonNull AnnotationMetadata importingClassMetadata,
+    public void registerBeanDefinitions(@NonNull AnnotationMetadata metadata,
         @NonNull BeanDefinitionRegistry registry) {
-        if (!resetConfig(importingClassMetadata)) {
+        AnnotationAttributes attributes =
+            AnnotationAttributes.fromMap(metadata.getAnnotationAttributes(EnableDynamicModules.class.getName()));
+        Assert.notNull(attributes, "Failed to load config from enable annotation due to fail to read attributes.");
+        boolean enable = (boolean)attributes.get(NamingUtils.getRawProperty(EnableDynamicModules::enable));
+        if(null != properties) {
+            resetConfig(attributes, ClassUtils.getPackageName(metadata.getClassName()));
+        }
+        log.debug("Find enable:{} option with configs:{} of dynamic modules.", enable, properties);
+        if (!enable || null == properties) {
             return;
         }
 
@@ -223,20 +231,14 @@ public class DynamicModuleRegistrar implements ImportBeanDefinitionRegistrar, En
 
     /**
      * 重置配置信息，用启动注解指定的属性来覆盖配置文件中的属性
-     *
-     * @param metadata 注解元数据
-     * @return 重置后是否启用此功能
+     * @param attributes 入口注解属性集
+     * @param entrance 入口注解体现的包路径
      */
-    private boolean resetConfig(@NonNull AnnotationMetadata metadata) {
-        AnnotationAttributes attributes =
-            AnnotationAttributes.fromMap(metadata.getAnnotationAttributes(EnableDynamicModules.class.getName()));
-        Assert.notNull(attributes, "Failed to load config from enable annotation due to fail to read attributes.");
-        boolean enable = (boolean)attributes.get(NamingUtils.getRawProperty(EnableDynamicModules::enable));
+    private void resetConfig(@NonNull AnnotationAttributes attributes, @NonNull String entrance) {
         String[] annIncludes = (String[])attributes.get(NamingUtils.getRawProperty(EnableDynamicModules::includes));
         if (annIncludes.length != 0) {
             properties.setIncludes(annIncludes);
         }
-        String entrance = ClassUtils.getPackageName(metadata.getClassName());
         if (null == properties.getIncludes() || properties.getIncludes().length == 0) {
             properties.setIncludes(new String[] {entrance.replaceAll("\\.", "/") + "/**"});
         }
@@ -258,9 +260,6 @@ public class DynamicModuleRegistrar implements ImportBeanDefinitionRegistrar, En
             preferences.addAll(Arrays.asList(array));
             properties.setDefaultPreferences(null);
         }
-        log.debug("Find enable:{} option with configs:{} of dynamic modules.", enable, properties);
-
-        return enable;
     }
 
     /**
@@ -289,7 +288,7 @@ public class DynamicModuleRegistrar implements ImportBeanDefinitionRegistrar, En
             if (DynamicModuleUtils.isBlank(target.getRegistrarPath())) {
                 target.setRegistrarPath(source.getRegistrarPath());
             }
-            if(null == target.getCustomizes() || target.getCustomizes().isEmpty()){
+            if(null == target.getCustomizes() || target.getCustomizes().isEmpty()) {
                 target.setCustomizes(source.getCustomizes());
             }
         }
