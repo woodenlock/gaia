@@ -123,6 +123,9 @@ public enum ModuleTypeCache {
         Holder.STORE.forEach((type, map) -> {
             StringJoiner sj = new StringJoiner("\n");
             map.forEach((com, part) -> {
+                if(!BooleanEnum.TRUE.equals(part.getGenerate())) {
+                    return;
+                }
                 Class<?> entity = part.getEntity();
                 ClassGenerator generator = loadInstance(part.getGeneratorPath(), ClassGenerator.class, Holder.GENERATOR);
                 if (null == generator) {
