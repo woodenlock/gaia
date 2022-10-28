@@ -38,7 +38,7 @@ public abstract class BaseMongodbServiceImpl<R extends MongoRepository<E, K>, E,
 
     @Override
     public <T> List<T> selectSelectiveByIds(Collection<K> ids, Class<T> type, String... props) {
-        List<T> result = null;
+        List<T> result = new ArrayList<>();
         if (DynamicModuleUtils.isNotEmpty(ids) && null != type) {
             Query query = new Query();
             if (props.length != 0) {
